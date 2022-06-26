@@ -1,0 +1,57 @@
+Methodology:
+Following methodology was opted for hyperparameter exploration:
+1: Initializing hyperparameters:
+There are several types of hyperparameters. These can be found in the /data folder in yaml files. In order to have the best possible results, it is vital to start with the best possible estimates. If you're unsure, stick with the defaults because they've been fine-tuned for YOLOv5 COCO training.
+2: Adjusting value of fitness:
+We want to maximize the value of fitness. Weighted combo of metrics: mAP@0.5 provides 10%, while mAP@0.5:0.95 provides 90% of the weight in the default fitness function in YOLOv5. The standard fitness definition is available, but you are free to change it if you so desire.
+3: Evolution:
+Evolution is based on a starting point, and the goal is to make it better. YOLOv5s are used to finetune COCO128 over 10 epochs in this case. Create hyperparameters that are tailored to this particular circumstance, starting with the initial parameters stated in Section 1 and aiming to maximize the fitness described in Section 2.
+4: Crossover and mutation
+Crossover and mutation are the two most important mechanisms in genetics. With a 90% likelihood and a 0.04 variance, the best progenitors from past generations are combined in this work to produce new offspring. Every generation, yolov5/runs/evolve/hyp evolved.yaml saves the best-fitting offspring as yolov5/evolve.txt.
+For best results, we recommend at least 300 generations of evolution. Because the base scenario must be trained dozens of times, the evolution process is typically expensive and time demanding, needing tens of thousands of GPU hours.
+5: Visualize
+There is one plot for each hyperparameter in yolov5/evolve.png. The x-axis displays values, while the y-axis depicts fitness. The darker the color, the higher the concentration. Parameters with vertical markings indicate that they have been disabled and cannot change. Useful for preventing parameters from changing, this is a user-selectable option in meta dictionary.
+
+ 
+                                        Visualizing of hyperparameters
+6: Environments
+CUDA/CUDNN, Python, and PyTorch are all pre-installed in the following up-to-date tested environments.
+Discussion:
+Using evolutionary optimization, it is possible to optimize noisy black-box functions at the global level. To find the optimal set of parameters for a particular algorithm, evolutionary optimization utilizes evolutionary algorithms to explore the space of hyperparameters. The approach of evolutionary hyperparameter optimization is based on the idea of evolution in biology:
+1.	To get started, generate a large number of random solutions (usually more than 100 tuples of hyperparameters)
+2.	Analyze the tuples of hyperparameters and determine their fitness for instance: 10-fold cross-validation precision of the genetic algorithm along with these hyperparameters.
+3.	Determine the relative fitness of the hyperparameter tuples.
+4.	New hyperparameter item sets generated via crossover and mutation should be used to replace the worst-performing ones.
+5.	Once adequate algorithm performance has been achieved or algorithm efficiency is no longer improving, repeat steps 2-4.
+As a result, evolutionary algorithms have been used to optimize hyperparameters for statistical machine learning, automated machine learning, a neural net architecture search, and the training of neural network weights.
+
+Encoding scheme:
+
+The concepts of evolution guide the use of Genetic Algorithms (GA), which are randomised search and optimization methods. It is a search engine that is efficient, adaptable, and robust. A chromosome is a series of genes, as well as a chromosome is a population of potential solutions. Chromosome representation is a critical topic. The task of deciding how to encode the genes is critical. Encoding is very dependent on the problem being addressed. Different encoding techniques and the difficulties they address are examined in this work.
+Within AI and Robotics, genetic algorithms have a rich history as an evolving paradigm. In artificial life systems, they're currently a most prominent and extensively used models of evolution. Exploration and exploitation are two of the most significant aspects of search. The term "exploit" refers to the process of discovering a better solution by making use of information already in existence. The purpose of exploration is to seek out new and previously unexplored territory. A proper balance must be struck between exploitation & exploration in able to fix a real-world problem. It is possible to use Genetic Algorithm to solve problems in both the coding language (genotype) and the solution space at the same time (phenotype). The phenotype is a description of an individual's physical appearance. Mapping is a method for combining genetic and phenotype data to get a more complete picture of a person's traits. A chromosome is a string of DNA that contains all of an individual's genetic information. Each chromosome has a variety of alleles. In terms of chromosomes, alleles are the tiniest units of information. Encoding and decoding functions in genetic algorithms are used to express the mapping of object attributes to st1ring code as well as to achieve the mapping of the string code towards its object variable.
+
+Encoding scheme selection:
+Many of the terms used in Genetic Algorithm come from the field of genetics, which serves as a model for the technology. A person's genotype is a collection of all the genes they have, and DNA is the building block of all genes. The DNA and proteins in a live creature create the genes. Alleles, a genetic value, can be found in the genes. As the name implies, each gene has its own specific location on a chromosome. The encodings are selected based on the following factors:
+
+1.	Encoding in Binary:
+
+As the name suggests, it is the most widely used method of encoding any data. Binary strings represent each chromosome in this format. Binarized chromosomes are simply strings of 0s and 1s. The hexadecimal encoding is seen in Figure 2. Each bit in this encoding represents a specific property of the answer. Each binary string, on the other hand, denotes a distinct numerical value It is possible to represent a large number of chromosomes with a small number of alleles. One-point crossover, N-point crossover, Uniform and Arithmetic crossover are all conceivable in binary encoding. Flip is one option for a Mutation operator. Based on the created mutant chromosome, the bits shift from zero to one and one to zero. It's common practise in the Knapsack problem to employ binary encoding to indicate the presence of objects by using the number 1, for example, and the number 0, for the number 0.
+
+
+
+
+2.	Octave coding:
+The chromosome is encoded using octal numbers in this method (0-7). The octal encoding can be seen in Figure below:
+
+3.	Value coding:
+Each chromosome is represented as a string of a specific value in value encoding. There are many different types of values that can be used to represent a value. The crossover operator used for Integer numbers is the same as the one used for binary encoding. Variables can be anything related to the problem, from simple numeric values to complex real-world items, such as strings or chars. Value encoding is depicted in Figure below:
+
+Discussion:
+While binary encoding is the most straightforward, it does not allow for inversion of the data. Using the inversion operator, we can disrupt the building blocks and alter the fitness value, just like we did when using binary encoding. In this way, the number of accessible schemas is increased since binary encoding adheres to the minimal alphabet principle. Octal/hexadecimal/real encoding is utilized in very few contexts on the other hand. Despite the fact that binary encoding permits inversion, permutation encoding doesn't. PMX, OCX, and OX crossovers are all supported by Permutation Encoding, even though they are very difficult to implement. The suitability of a binary encoding scheme is determined by the values and the orders in which they are encoded. It all depends on the order in permutation encoding. It's all about the value when it comes to value encoding. Because of this, no encoding system can be used independently of them. Consequently, a new encoding strategy is needed that is independent of both value and order.
+
+Conclusion:
+
+The encoding system used to represent chromosomes should follow two principles, namely the principle of meaningful construction blocks and the principle of minimum alphabets, which boosts the survival rate of individuals. A gene's position in a coding scheme can have a significant impact on its fitness. Various encoding methods require a variety of operators for crossover and mutation. Some operators can be used in multiple contexts, whereas others can only be used in a single context. Encoding schemes can be further improved through the combination of existing scheme features and operators they can be applied to. Since the issue specification greatly influences their applicability, there is room for improvement in encoding methods.
+
+
+
